@@ -32,6 +32,9 @@ public class Room {
 
     @Column
     @NotNull
-    private boolean reserved;
+    private Integer roomNumber;
 
+    @Column
+    @NotNull
+    private boolean reserved;
 }
