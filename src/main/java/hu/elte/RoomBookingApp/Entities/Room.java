@@ -1,15 +1,15 @@
 package hu.elte.RoomBookingApp.Entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -37,4 +37,9 @@ public class Room {
     @Column
     @NotNull
     private boolean reserved;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "room")
+    private List<User> users;
+
 }

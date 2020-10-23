@@ -1,14 +1,13 @@
 package hu.elte.RoomBookingApp.Entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import javax.persistence.Id;
+
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -16,7 +15,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +27,15 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private boolean enabled;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
+    public enum Role {
+        ROLE_USER, ROLE_ADMIN
+    }
+
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
+    private Room room;
 }
