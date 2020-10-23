@@ -1,1 +1,10 @@
-//TODO
+package hu.elte.RoomBookingApp.Repositories;
+
+import hu.elte.RoomBookingApp.Entities.Room;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface RoomRepository extends CrudRepository<Room, Integer> {
+
+}
