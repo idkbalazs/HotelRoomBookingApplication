@@ -36,6 +36,12 @@ public class Booking {
     @Column
     @NotNull
     private String leaveDate;
+	
+	@OneToMany(mappedBy = "booking")
+    private List<Room> rooms;
 
-
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
+    private User user;
 }

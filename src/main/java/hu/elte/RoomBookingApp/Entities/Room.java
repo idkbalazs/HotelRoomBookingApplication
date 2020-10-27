@@ -38,8 +38,9 @@ public class Room {
     @NotNull
     private boolean reserved;
 
+    @ManyToOne
+    @JoinColumn
     @JsonIgnore
-    @OneToMany(mappedBy = "room")
-    private List<User> users;
+    private Booking booking;
 
 }
