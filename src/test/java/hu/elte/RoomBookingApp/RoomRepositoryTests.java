@@ -1,14 +1,15 @@
 package hu.elte.RoomBookingApp;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.*; //Assert.assertEquals;
+import static org.junit.*; //Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,7 +26,7 @@ public class RoomRepositoryTests {
 	private RoomRepository roomRepository;
 	
 	@Test
-	  void injectedComponentsAreNotNull(){
+	  public void injectedComponentsAreNotNull(){
 	    assertThat(roomRepository).isNotNull();
 	}
 	
