@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
+import java.util.List;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -33,9 +33,8 @@ public class User {
     public enum Role {
         ROLE_USER, ROLE_ADMIN
     }
+	
+	@OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
 
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Room room;
 }
