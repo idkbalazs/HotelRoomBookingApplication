@@ -52,7 +52,7 @@ public class ControllerTest {
 	@WithMockUser(value = "MVCtestprofile")
 	@Test
 	void usersTest() throws Exception {
-	    mockMvc.perform(get("/users").contentType("application/json")).andExpect(status().is(404));
+	    mockMvc.perform(get("/allusers").contentType("application/json")).andExpect(status().is(404));
 	}
 
 	@Test
