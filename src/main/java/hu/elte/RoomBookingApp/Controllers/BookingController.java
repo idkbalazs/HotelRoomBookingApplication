@@ -1,7 +1,12 @@
 package hu.elte.RoomBookingApp.Controllers;
 
 import hu.elte.RoomBookingApp.Entities.Booking;
+import hu.elte.RoomBookingApp.Entities.User;
 import hu.elte.RoomBookingApp.Repositories.BookingRepository;
+import hu.elte.RoomBookingApp.Entities.Room;
+import hu.elte.RoomBookingApp.Repositories.RoomRepository;
+import hu.elte.RoomBookingApp.Repositories.UserRepository;
+import hu.elte.RoomBookingApp.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,9 +29,25 @@ public class BookingController {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
     @GetMapping("")
     public ResponseEntity<Iterable<Booking>> getAll() {
         return ResponseEntity.ok(bookingRepository.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Booking> get(@PathVariable Integer id) {
+        Optional<Booking> booking = bookingRepository.findById(id);
+        if (booking.isPresent()) {
+            return ResponseEntity.ok(booking.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("")
@@ -35,26 +56,33 @@ public class BookingController {
         return ResponseEntity.ok(newBooking);
     }
 
-    @GetMapping(value = "/myBookings/{iD}")
-    public ResponseEntity<Object> getGenre(@PathVariable Integer iD ) {
-        Optional<Booking> oBooking = bookingRepository.findById(iD);
-        if (!oBooking.isPresent()) {
-            ResponseEntity.notFound();
+    @PutMapping("/{id}/user")
+    public ResponseEntity<User> put(@PathVariable Integer id) {
+        Optional<Booking> oBooking = bookingRepository.findById(id);
+        Optional<User> oUser = userRepository.findById(id);
+        if (oBooking.isPresent()) {
+            Booking booking = oBooking.get();
+            if(oUser.isPresent()) {
+                User user = oUser.get();
+                booking.setUser(user);
+                return ResponseEntity.ok(userRepository.save(user));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
         }
-
-        return new ResponseEntity<Object>(oBooking, HttpStatus.OK);
     }
 
-    @DeleteMapping("/myBookings/{iD}")
-    public ResponseEntity delete(@PathVariable Integer iD) {
-        Optional<Booking> oBooking = bookingRepository.findById(iD);
-        if (!oBooking.isPresent()) {
-            ResponseEntity.notFound();
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Integer id) {
+        Optional<Booking> oBooking = bookingRepository.findById(id);
+        if (oBooking.isPresent()) {
+            bookingRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
-
-        bookingRepository.delete(oBooking.get());
-
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{iD}")
@@ -65,5 +93,34 @@ public class BookingController {
         }
         return ResponseEntity.ok(bookingRepository.save(booking));
     }
+
+    @GetMapping("/{id}/rooms")
+    public ResponseEntity<Iterable<Room>> rooms(@PathVariable Integer id) {
+        Optional<Booking> oBooking = bookingRepository.findById(id);
+        if (oBooking.isPresent()) {
+            return ResponseEntity.ok(oBooking.get().getRooms());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/room/{room_id}")
+    public ResponseEntity<Room> insertRoom(@PathVariable Integer id, @PathVariable Integer room_id) {
+        Optional<Booking> oBooking = bookingRepository.findById(id);
+        Optional<Room> oRoom = roomRepository.findById(room_id);
+        if (oBooking.isPresent()) {
+            Booking booking = oBooking.get();
+            if(oRoom.isPresent()) {
+                Room room = oRoom.get();
+                room.setBooking(booking);
+                return ResponseEntity.ok(roomRepository.save(room));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

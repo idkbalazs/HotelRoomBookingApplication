@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping("Rooms")
+@RequestMapping("rooms")
 public class RoomController {
 
     @Autowired
@@ -31,11 +31,11 @@ public class RoomController {
     @GetMapping(value = "/{iD}")
     public ResponseEntity<Room> get(@PathVariable Integer iD) {
         Optional<Room> room = roomRepository.findById(iD);
-        if (!room.isPresent()) {
-            ResponseEntity.notFound();
+        if (room.isPresent()) {
+            return ResponseEntity.ok(room.get());
+        } else {
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.ok(room.get());
     }
 
     @PostMapping("")
@@ -44,16 +44,15 @@ public class RoomController {
         return ResponseEntity.ok(newRoom);
     }
 
-    @DeleteMapping("/{iD}")
-    public ResponseEntity delete(@PathVariable Integer iD) {
-        Optional<Room> room = roomRepository.findById(iD);
-        if (!room.isPresent()) {
-            ResponseEntity.notFound();
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Integer id) {
+        Optional<Room> room = roomRepository.findById(id);
+        if (room.isPresent()) {
+            roomRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
-
-        roomRepository.delete(room.get());
-
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{iD}")
