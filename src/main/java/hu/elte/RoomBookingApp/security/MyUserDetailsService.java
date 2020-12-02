@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import hu.elte.RoomBookingApp.Entities.User;
+import hu.elte.RoomBookingApp.Exceptions.ResourceNotFoundException;
 import hu.elte.RoomBookingApp.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,5 +40,8 @@ public class MyUserDetailsService implements UserDetailsService{
 		grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
 
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+	}
+	public User findById(Integer iD) {
+		return userRepository.findById(iD).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", iD));
 	}
 }
