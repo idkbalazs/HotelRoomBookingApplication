@@ -4,24 +4,26 @@ package hu.elte.RoomBookingApp.Controllers;
 import java.util.Optional;
 
 import hu.elte.RoomBookingApp.Entities.User;
+import hu.elte.RoomBookingApp.Exceptions.InternalServerErrorException;
+import hu.elte.RoomBookingApp.Exceptions.ResourceNotFoundException;
 import hu.elte.RoomBookingApp.Repositories.UserRepository;
 import hu.elte.RoomBookingApp.security.AuthenticatedUser;
+import hu.elte.RoomBookingApp.security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+    @Autowired
+    private MyUserDetailsService userService;
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -59,6 +61,18 @@ public class UserController {
             return ResponseEntity.ok(user.get());
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @PutMapping("/changepassword/{iD}")
+    public void changePassword(@PathVariable Integer iD, @RequestBody User userDetails) {
+        try {
+            userService.changePassword(iD, userDetails);
+        } catch (ResourceNotFoundException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new InternalServerErrorException("Unexpected error!");
         }
     }
 }

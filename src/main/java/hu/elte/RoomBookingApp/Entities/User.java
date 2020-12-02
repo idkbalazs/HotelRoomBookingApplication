@@ -27,6 +27,10 @@ public class User {
     @NotNull(message = "Username cannot be blank")
     private String username;
 
+    @Column(name = "name",  nullable = false)
+    @NotNull(message = "Name cannot be blank")
+    private String name;
+
     @Length(min = 8, message = "Password must be at least 8 characters.")
     @NotNull(message = "Password field must not be empty.")
     @Column(name = "password",nullable = false)

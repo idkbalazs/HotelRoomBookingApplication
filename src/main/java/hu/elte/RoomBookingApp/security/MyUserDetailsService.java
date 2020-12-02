@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ public class MyUserDetailsService implements UserDetailsService{
 
 	@Autowired
 	private AuthenticatedUser authenticatedUser;
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -43,5 +47,10 @@ public class MyUserDetailsService implements UserDetailsService{
 	}
 	public User findById(Integer iD) {
 		return userRepository.findById(iD).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", iD));
+	}
+	public void changePassword(Integer iD, User userDetails) {
+		User user = findById(iD);
+		user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+		userRepository.save(user);
 	}
 }
