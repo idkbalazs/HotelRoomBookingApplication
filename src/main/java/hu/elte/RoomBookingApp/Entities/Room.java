@@ -21,11 +21,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer iD;
-
-    @Column
-    @NotNull
-    private Integer capacity;
-
+    
     @Column
     @NotNull
     private Integer floor;
@@ -33,10 +29,6 @@ public class Room {
     @Column
     @NotNull
     private Integer roomNumber;
-
-    @Column
-    @NotNull
-    private boolean reserved;
 
     @ManyToOne
     @JoinColumn

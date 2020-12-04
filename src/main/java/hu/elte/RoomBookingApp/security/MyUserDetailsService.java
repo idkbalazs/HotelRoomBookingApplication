@@ -4,7 +4,6 @@ package hu.elte.RoomBookingApp.security;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import hu.elte.RoomBookingApp.Entities.User;
 import hu.elte.RoomBookingApp.Exceptions.ResourceNotFoundException;
 import hu.elte.RoomBookingApp.Repositories.UserRepository;

@@ -23,11 +23,12 @@ public class Booking {
     private Integer id;
 
     @Column
-    private String name;
+    @NotNull
+    private String floor;
 
     @Column
     @NotNull
-    private Integer price;
+    private String room;
 
     @Column
     @NotNull

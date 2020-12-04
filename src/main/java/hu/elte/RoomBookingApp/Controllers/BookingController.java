@@ -8,8 +8,13 @@ import hu.elte.RoomBookingApp.Repositories.RoomRepository;
 import hu.elte.RoomBookingApp.Repositories.UserRepository;
 import hu.elte.RoomBookingApp.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +61,20 @@ public class BookingController {
         return ResponseEntity.ok(newBooking);
     }
 
+
+
+    @Secured({"ROLE_USER"})
+    @GetMapping("/user/{iD}")
+    public ResponseEntity<List<Booking>> getByUser(@PathVariable Integer iD){
+        Optional<User> oUser = userRepository.findById(iD);
+        Optional<List<Booking>> booking =bookingRepository.findByUser(oUser.get());
+        if (!oUser.isPresent()) {
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+        List<Booking> app = booking.isPresent() ? booking.get() : new ArrayList<>();
+        return ResponseEntity.ok(app);
+    }
+
     @PutMapping("/{id}/user")
     public ResponseEntity<User> put(@PathVariable Integer id) {
         Optional<Booking> oBooking = bookingRepository.findById(id);
@@ -77,12 +96,16 @@ public class BookingController {
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
         Optional<Booking> oBooking = bookingRepository.findById(id);
-        if (oBooking.isPresent()) {
-            bookingRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        if (!oBooking.isPresent()) {
+            ResponseEntity.notFound();
         }
+        try {
+            bookingRepository.delete(oBooking.get());
+        } catch (NoSuchElementException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{iD}")
