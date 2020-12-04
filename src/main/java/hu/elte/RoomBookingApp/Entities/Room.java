@@ -21,7 +21,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer iD;
-    
+
     @Column
     @NotNull
     private Integer floor;
