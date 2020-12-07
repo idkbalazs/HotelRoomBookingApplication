@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -42,7 +43,8 @@ public class BookingController {
     @Autowired
     private RoomRepository roomRepository;
 
-    @GetMapping("")
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/all")
     public ResponseEntity<Iterable<Booking>> getAll() {
         return ResponseEntity.ok(bookingRepository.findAll());
     }
@@ -56,7 +58,10 @@ public class BookingController {
             return ResponseEntity.notFound().build();
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 99941917fe381178a96d373d4e3bfdf16136228a
     @Secured("ROLE_USER")
     @PostMapping("/{id}")
     public ResponseEntity<Booking> post(@RequestBody @Valid Booking booking, @PathVariable Integer id) {
@@ -68,13 +73,33 @@ public class BookingController {
         return ResponseEntity.ok(bookingRepository.save(booking));
     }
 
+/*
+    @Secured("ROLE_USER")
+    @PostMapping("/{roomId}")
+    public ResponseEntity<Booking> post(@PathVariable Integer roomId, @RequestBody Booking newBooking) {
+        boolean isValidBooking = true;
+        Iterable<Booking> allBookings = bookingRepository.findAll();
 
+        for (Booking existingBooking : allBookings) {
+            if (existingBooking.getRoomId() == roomId) {
+                isValidBooking = (newBooking.getArriveDate().isAfter(existingBooking.getLeaveDate()) || newBooking.getLeaveDate().isBefore(existingBooking.getArriveDate()));
+            }
+        }
+
+        if (isValidBooking) {
+            newBooking.setRoomId(roomId);
+            Booking savedBooking = bookingRepository.save(newBooking);
+            return ResponseEntity.ok(savedBooking);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }*/
 
     @Secured({"ROLE_USER"})
     @GetMapping("/user/{iD}")
-    public ResponseEntity<List<Booking>> getByUser(@PathVariable Integer iD){
+    public ResponseEntity<List<Booking>> getByUser(@PathVariable Integer iD) {
         Optional<User> oUser = userRepository.findById(iD);
-        Optional<List<Booking>> booking =bookingRepository.findByUser(oUser.get());
+        Optional<List<Booking>> booking = bookingRepository.findByUser(oUser.get());
         if (!oUser.isPresent()) {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
@@ -88,7 +113,7 @@ public class BookingController {
         Optional<User> oUser = userRepository.findById(id);
         if (oBooking.isPresent()) {
             Booking booking = oBooking.get();
-            if(oUser.isPresent()) {
+            if (oUser.isPresent()) {
                 User user = oUser.get();
                 booking.setUser(user);
                 return ResponseEntity.ok(userRepository.save(user));
@@ -123,6 +148,40 @@ public class BookingController {
         }
         return ResponseEntity.ok(bookingRepository.save(booking));
     }
+<<<<<<< HEAD
 
 
 }
+=======
+/*
+    @GetMapping("/{id}/rooms")
+    public ResponseEntity<Room> rooms(@PathVariable Integer id) {
+        Optional<Booking> oBooking = bookingRepository.findById(id);
+        if (oBooking.isPresent()) {
+            return ResponseEntity.ok(oBooking.get().getRoomEntity());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/room/{room_id}")
+    public ResponseEntity<Room> insertRoom(@PathVariable Integer id, @PathVariable Integer room_id) {
+        Optional<Booking> oBooking = bookingRepository.findById(id);
+        Optional<Room> oRoom = roomRepository.findById(room_id);
+        if (oBooking.isPresent()) {
+            Booking booking = oBooking.get();
+            if (oRoom.isPresent()) {
+                Room room = oRoom.get();
+                room.setBooking(booking);
+                return ResponseEntity.ok(roomRepository.save(room));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+*/
+}
+>>>>>>> 99941917fe381178a96d373d4e3bfdf16136228a

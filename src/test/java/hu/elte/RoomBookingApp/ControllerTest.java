@@ -34,6 +34,7 @@ public class ControllerTest {
     @MockBean
     UserRepository userRepository;
 
+<<<<<<< HEAD
     @MockBean
     private BCryptPasswordEncoder passwordEncoder;
     @WithMockUser(value = "MVCtestprofile")
@@ -45,5 +46,27 @@ public class ControllerTest {
     void whenUserNotAuthenticated_thenReturns401() throws Exception {
         mockMvc.perform(get("/bookings").contentType("application/json")).andExpect(status().is(401));
     }
+=======
+	@MockBean
+	AuthenticatedUser authenticatedUser;
+	
+	@MockBean
+	BookingRepository bookingRepository;
+	
+	@MockBean
+	RoomRepository roomRepository;
+	
+	@MockBean
+	UserRepository userRepository;
+	
+	@MockBean
+	private BCryptPasswordEncoder passwordEncoder;
+
+	@WithMockUser(value = "MVCtestprofile")
+	@Test
+	void usersTest() throws Exception {
+	    mockMvc.perform(get("/allusers").contentType("application/json")).andExpect(status().is(404));
+	}
+>>>>>>> 99941917fe381178a96d373d4e3bfdf16136228a
 
 }
