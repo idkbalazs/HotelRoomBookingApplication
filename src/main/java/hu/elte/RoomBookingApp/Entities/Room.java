@@ -30,9 +30,4 @@ public class Room {
     @NotNull
     private Integer roomNumber;
 
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Booking booking;
-
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -32,14 +33,11 @@ public class Booking {
 
     @Column
     @NotNull
-    private String arriveDate;
+    private LocalDate arriveDate;
 
     @Column
     @NotNull
-    private String leaveDate;
-	
-	@OneToMany(mappedBy = "booking")
-    private List<Room> rooms;
+    private LocalDate leaveDate;
 
     @ManyToOne
     @JoinColumn

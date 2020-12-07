@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/bookings")
@@ -55,10 +57,15 @@ public class BookingController {
         }
     }
 
-    @PostMapping("")
-    public ResponseEntity<Booking> post(@RequestBody Booking booking) {
-        Booking newBooking = bookingRepository.save(booking);
-        return ResponseEntity.ok(newBooking);
+    @Secured("ROLE_USER")
+    @PostMapping("/{id}")
+    public ResponseEntity<Booking> post(@RequestBody @Valid Booking booking, @PathVariable Integer id) {
+        Optional<User> oUser = userRepository.findById(id);
+        if (!oUser.isPresent()) {
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+        booking.setUser(oUser.get());
+        return ResponseEntity.ok(bookingRepository.save(booking));
     }
 
 
@@ -115,34 +122,6 @@ public class BookingController {
             ResponseEntity.notFound();
         }
         return ResponseEntity.ok(bookingRepository.save(booking));
-    }
-
-    @GetMapping("/{id}/rooms")
-    public ResponseEntity<Iterable<Room>> rooms(@PathVariable Integer id) {
-        Optional<Booking> oBooking = bookingRepository.findById(id);
-        if (oBooking.isPresent()) {
-            return ResponseEntity.ok(oBooking.get().getRooms());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PutMapping("/{id}/room/{room_id}")
-    public ResponseEntity<Room> insertRoom(@PathVariable Integer id, @PathVariable Integer room_id) {
-        Optional<Booking> oBooking = bookingRepository.findById(id);
-        Optional<Room> oRoom = roomRepository.findById(room_id);
-        if (oBooking.isPresent()) {
-            Booking booking = oBooking.get();
-            if(oRoom.isPresent()) {
-                Room room = oRoom.get();
-                room.setBooking(booking);
-                return ResponseEntity.ok(roomRepository.save(room));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 
 
