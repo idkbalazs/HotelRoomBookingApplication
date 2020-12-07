@@ -1,0 +1,16 @@
+insert into public.Room(id, floor, room_number) values (1, '1', '1')
+insert into public.Room(id, floor, room_number) values (2, '1', '2')
+insert into public.Room(id, floor, room_number) values (3, '1', '3')
+insert into public.Room(id, floor, room_number) values (4, '1', '4')
+insert into public.Room(id, floor, room_number) values (5, '1', '5')
+insert into public.Room(id, floor, room_number) values (6, '1', '6')
+insert into public.Room(id, floor, room_number) values (7, '2', '1')
+insert into public.Room(id, floor, room_number) values (8, '2', '2')
+insert into public.Room(id, floor, room_number) values (9, '2', '3')
+insert into public.Room(id, floor, room_number) values (10, '3', '1')
+insert into public.Room(id, floor, room_number) values (11, '3', '2')
+insert into public.Room(id, floor, room_number) values (11, '3', '3')
+
+insert into public.User(id, name, password, role, username) values ( 100, 'Admin teszt', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', 'ROLE_ADMIN', 'admin')
+
+insert into public.User(id, name, password, role, username) values ( 101, 'User teszt', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', 'ROLE_USER', 'userteszt')
