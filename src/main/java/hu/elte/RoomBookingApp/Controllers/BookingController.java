@@ -49,6 +49,12 @@ public class BookingController {
         return ResponseEntity.ok(bookingRepository.findAll());
     }
 
+    @Secured({"ROLE_USER"})
+    @GetMapping("")
+    public ResponseEntity<Iterable<Booking>> getAll2() {
+        return ResponseEntity.ok(bookingRepository.findAll());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Booking> get(@PathVariable Integer id) {
         Optional<Booking> booking = bookingRepository.findById(id);
