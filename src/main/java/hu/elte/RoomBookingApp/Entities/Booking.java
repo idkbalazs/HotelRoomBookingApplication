@@ -40,10 +40,6 @@ public class Booking {
     @Column
     @NotNull
     private LocalDate leaveDate;
-<<<<<<< HEAD
-=======
-
->>>>>>> 99941917fe381178a96d373d4e3bfdf16136228a
 
     @ManyToOne
     @JoinColumn
