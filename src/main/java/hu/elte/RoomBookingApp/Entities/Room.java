@@ -2,6 +2,7 @@ package hu.elte.RoomBookingApp.Entities;
 
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,10 +30,5 @@ public class Room {
     @Column
     @NotNull
     private Integer roomNumber;
-
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Booking booking;
 
 }

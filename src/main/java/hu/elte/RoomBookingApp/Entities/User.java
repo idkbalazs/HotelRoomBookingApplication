@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.Length;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer iD;
 
     @Length(min = 4, max = 16, message = "Username must be 4-16 character")
     @Column(name = "username", unique = true, nullable = false)

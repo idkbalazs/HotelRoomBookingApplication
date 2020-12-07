@@ -42,13 +42,7 @@ public class ControllerTest {
 	
 	@MockBean
 	private BCryptPasswordEncoder passwordEncoder;
-	
-	@WithMockUser(value = "MVCtestprofile")
-	@Test
-	void whenValidInput_thenReturns200() throws Exception {
-	    mockMvc.perform(get("/bookings").contentType("application/json")).andExpect(status().is(200));
-	}
-	
+
 	@WithMockUser(value = "MVCtestprofile")
 	@Test
 	void usersTest() throws Exception {

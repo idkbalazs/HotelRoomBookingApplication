@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
@@ -40,7 +43,8 @@ public class BookingController {
     @Autowired
     private RoomRepository roomRepository;
 
-    @GetMapping("")
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/all")
     public ResponseEntity<Iterable<Booking>> getAll() {
         return ResponseEntity.ok(bookingRepository.findAll());
     }
@@ -54,20 +58,44 @@ public class BookingController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @PostMapping("")
-    public ResponseEntity<Booking> post(@RequestBody Booking booking) {
-        Booking newBooking = bookingRepository.save(booking);
-        return ResponseEntity.ok(newBooking);
+    @Secured("ROLE_USER")
+    @PostMapping("/{id}")
+    public ResponseEntity<Booking> post(@RequestBody @Valid Booking booking, @PathVariable Integer id) {
+        Optional<User> oUser = userRepository.findById(id);
+        if (!oUser.isPresent()) {
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+        booking.setUser(oUser.get());
+        return ResponseEntity.ok(bookingRepository.save(booking));
     }
 
+/*
+    @Secured("ROLE_USER")
+    @PostMapping("/{roomId}")
+    public ResponseEntity<Booking> post(@PathVariable Integer roomId, @RequestBody Booking newBooking) {
+        boolean isValidBooking = true;
+        Iterable<Booking> allBookings = bookingRepository.findAll();
 
+        for (Booking existingBooking : allBookings) {
+            if (existingBooking.getRoomId() == roomId) {
+                isValidBooking = (newBooking.getArriveDate().isAfter(existingBooking.getLeaveDate()) || newBooking.getLeaveDate().isBefore(existingBooking.getArriveDate()));
+            }
+        }
+
+        if (isValidBooking) {
+            newBooking.setRoomId(roomId);
+            Booking savedBooking = bookingRepository.save(newBooking);
+            return ResponseEntity.ok(savedBooking);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }*/
 
     @Secured({"ROLE_USER"})
     @GetMapping("/user/{iD}")
-    public ResponseEntity<List<Booking>> getByUser(@PathVariable Integer iD){
+    public ResponseEntity<List<Booking>> getByUser(@PathVariable Integer iD) {
         Optional<User> oUser = userRepository.findById(iD);
-        Optional<List<Booking>> booking =bookingRepository.findByUser(oUser.get());
+        Optional<List<Booking>> booking = bookingRepository.findByUser(oUser.get());
         if (!oUser.isPresent()) {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
@@ -81,7 +109,7 @@ public class BookingController {
         Optional<User> oUser = userRepository.findById(id);
         if (oBooking.isPresent()) {
             Booking booking = oBooking.get();
-            if(oUser.isPresent()) {
+            if (oUser.isPresent()) {
                 User user = oUser.get();
                 booking.setUser(user);
                 return ResponseEntity.ok(userRepository.save(user));
@@ -116,12 +144,12 @@ public class BookingController {
         }
         return ResponseEntity.ok(bookingRepository.save(booking));
     }
-
+/*
     @GetMapping("/{id}/rooms")
-    public ResponseEntity<Iterable<Room>> rooms(@PathVariable Integer id) {
+    public ResponseEntity<Room> rooms(@PathVariable Integer id) {
         Optional<Booking> oBooking = bookingRepository.findById(id);
         if (oBooking.isPresent()) {
-            return ResponseEntity.ok(oBooking.get().getRooms());
+            return ResponseEntity.ok(oBooking.get().getRoomEntity());
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -133,7 +161,7 @@ public class BookingController {
         Optional<Room> oRoom = roomRepository.findById(room_id);
         if (oBooking.isPresent()) {
             Booking booking = oBooking.get();
-            if(oRoom.isPresent()) {
+            if (oRoom.isPresent()) {
                 Room room = oRoom.get();
                 room.setBooking(booking);
                 return ResponseEntity.ok(roomRepository.save(room));
@@ -145,5 +173,5 @@ public class BookingController {
         }
     }
 
-
+*/
 }

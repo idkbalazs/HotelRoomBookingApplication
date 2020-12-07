@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository extends CrudRepository<Booking, Integer>{
     Optional<List<Booking>> findByUser(User user);
+
 }

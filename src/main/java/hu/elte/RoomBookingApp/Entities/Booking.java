@@ -1,6 +1,7 @@
 package hu.elte.RoomBookingApp.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +22,7 @@ import java.util.Set;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer iD;
 
     @Column
     @NotNull
@@ -32,17 +34,15 @@ public class Booking {
 
     @Column
     @NotNull
-    private String arriveDate;
+    private LocalDate arriveDate;
 
     @Column
     @NotNull
-    private String leaveDate;
-	
-	@OneToMany(mappedBy = "booking")
-    private List<Room> rooms;
+    private LocalDate leaveDate;
+
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+    @JsonIgnoreProperties({"bookings"})
     private User user;
 }
