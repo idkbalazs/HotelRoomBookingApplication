@@ -9,7 +9,7 @@ insert into public.Room(id, floor, room_number) values (8, '2', '2')
 insert into public.Room(id, floor, room_number) values (9, '2', '3')
 insert into public.Room(id, floor, room_number) values (10, '3', '1')
 insert into public.Room(id, floor, room_number) values (11, '3', '2')
-insert into public.Room(id, floor, room_number) values (11, '3', '3')
+insert into public.Room(id, floor, room_number) values (12, '3', '3')
 
 insert into public.User(id, name, password, role, username) values ( 100, 'Admin teszt', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', 'ROLE_ADMIN', 'admin')
 
